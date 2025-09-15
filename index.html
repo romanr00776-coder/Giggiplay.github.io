@@ -7,12 +7,16 @@
   <style>
     body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
     header { background: #333; color: white; padding: 15px; text-align: center; }
-    .container { max-width: 800px; margin: auto; padding: 20px; }
+    nav { background: #444; padding: 10px; text-align: center; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    .container { max-width: 900px; margin: auto; padding: 20px; }
     .post { background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     .post h2 { margin-top: 0; }
     .post a { text-decoration: none; color: #333; }
     .post a:hover { color: #0077cc; }
+    footer { background: #333; color: white; text-align: center; padding: 15px; margin-top: 30px; }
   </style>
 </head>
 <body>
@@ -21,23 +25,38 @@
     <p>Powered by Blogger + GitHub Pages 🚀</p>
   </header>
 
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+
   <div class="container" id="feed">
     <p>Loading latest posts...</p>
   </div>
 
+  <footer>
+    <p>© 2025 Giggiplay Blog | All Rights Reserved</p>
+  </footer>
+
   <script>
-    const feedUrl = "https://www.giggiplay.online/feeds/posts/default?alt=json";
+    // Blogger RSS ko JSON me convert karne ke liye rss2json API use kiya
+    const feedUrl = "https://api.rss2json.com/v1/api.json?rss_url=https://www.giggiplay.online/feeds/posts/default";
+
     const feedContainer = document.getElementById("feed");
 
     fetch(feedUrl)
       .then(response => response.json())
       .then(data => {
-        const entries = data.feed.entry;
+        if (!data.items) {
+          feedContainer.innerHTML = "<p>No posts found.</p>";
+          return;
+        }
         feedContainer.innerHTML = "";
-        entries.slice(0, 5).forEach(entry => {  // latest 5 posts
-          const title = entry.title.$t;
-          const link = entry.link.find(l => l.rel === "alternate").href;
-          const content = entry.content.$t.substring(0, 150) + "..."; // short preview
+        data.items.slice(0, 5).forEach(entry => {
+          const title = entry.title;
+          const link = entry.link;
+          const content = entry.description.substring(0, 150) + "...";
 
           const postDiv = document.createElement("div");
           postDiv.classList.add("post");
