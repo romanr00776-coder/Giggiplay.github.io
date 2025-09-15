@@ -5,34 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Latest Posts</title>
 <style>
-  body { font-family: Arial, sans-serif; padding: 20px; }
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+  h1 { color: #333; }
   #feed { list-style: none; padding: 0; }
-  #feed li { margin-bottom: 15px; }
-  #feed li a { text-decoration: none; color: #0077cc; }
+  #feed li { margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  #feed li a { text-decoration: none; color: #0077cc; font-weight: bold; }
   #feed li a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
+
 <h1>Latest Posts</h1>
 <ul id="feed"></ul>
 
 <script>
-  function displayFeed(data) {
-    const feedContainer = document.getElementById("feed");
-    const entries = data.feed.entry || [];
-    entries.forEach(entry => {
-      const title = entry.title.$t;
-      const link = entry.link.find(l => l.rel === "alternate").href;
+const feedUrl = "https://www.giggiplay.online/feeds/posts/default?alt=rss";
+
+async function loadFeed() {
+  const feedContainer = document.getElementById("feed");
+  try {
+    const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`);
+    const data = await response.json();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(data.contents, "text/xml");
+    const items = xml.querySelectorAll("item");
+    feedContainer.innerHTML = "";
+
+    for (let i = 0; i < Math.min(10, items.length); i++) {
+      const title = items[i].querySelector("title").textContent;
+      const link = items[i].querySelector("link").textContent;
       const li = document.createElement("li");
       li.innerHTML = `<a href="${link}" target="_blank">${title}</a>`;
       feedContainer.appendChild(li);
-    });
+    }
+  } catch (error) {
+    console.error("Error loading feed:", error);
+    feedContainer.innerHTML = "<li>Failed to load feed.</li>";
   }
+}
 
-  // JSONP method for Blogger feed
-  const script = document.createElement("script");
-  script.src = "https://www.giggiplay.online/feeds/posts/default?alt=json-in-script&max-results=10&callback=displayFeed";
-  document.body.appendChild(script);
+loadFeed();
 </script>
+
 </body>
 </html>
