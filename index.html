@@ -3,49 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giggiplay Blog (Auto Posts)</title>
+  <title>Latest Posts</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
-    header { background: #333; color: white; padding: 15px; text-align: center; }
-    .container { max-width: 800px; margin: auto; padding: 20px; }
-    .post { background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .post h2 { margin-top: 0; }
-    .post a { text-decoration: none; color: #333; }
-    .post a:hover { color: #0077cc; }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #feed { list-style: none; padding: 0; }
+    #feed li { margin-bottom: 15px; }
+    #feed li a { text-decoration: none; color: #0077cc; }
+    #feed li a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to Giggiplay Blog</h1>
-    <p>Powered by Blogger + GitHub Pages 🚀</p>
-  </header>
+  <h1>Latest Posts</h1>
+  <ul id="feed"></ul>
 
-  <div class="container" id="feed">
-    <p>Loading latest posts...</p>
-  </div>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
-    const feedUrl = "https://www.giggiplay.online/feeds/posts/default?alt=json-in-script&callback=?";
+    const feedUrl = "https://www.giggiplay.online/feeds/posts/default?alt=json&max-results=10";
+    const feedContainer = document.getElementById("feed");
 
-    $.getJSON(feedUrl, function(data) {
-      const entries = data.feed.entry;
-      let html = "";
-      $(entries).slice(0, 5).each(function(i, entry) {
-        const title = entry.title.$t;
-        const link = entry.link.find(l => l.rel === "alternate").href;
-        const content = entry.content.$t.substring(0, 150) + "...";
-        html += `
-          <div class="post">
-            <h2><a href="${link}" target="_blank">${title}</a></h2>
-            <p>${content}</p>
-          </div>`;
+    fetch(feedUrl)
+      .then(response => response.json())
+      .then(data => {
+        const entries = data.feed.entry || [];
+        entries.forEach(entry => {
+          const title = entry.title.$t;
+          const link = entry.link.find(l => l.rel === "alternate").href;
+          const li = document.createElement("li");
+          li.innerHTML = `<a href="${link}" target="_blank">${title}</a>`;
+          feedContainer.appendChild(li);
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching feed:", error);
+        feedContainer.innerHTML = "<li>Failed to load feed.</li>";
       });
-      $("#feed").html(html);
-    }).fail(function() {
-      $("#feed").html("<p>Failed to load posts. Check feed URL.</p>");
-    });
   </script>
 </body>
 </html>
