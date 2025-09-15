@@ -1,11 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Welcome to My Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My GitHub Blog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+    header {
+      background: #333;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    nav {
+      background: #444;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    .post {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .post h2 {
+      margin-top: 0;
+    }
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello! Ye mera pehla GitHub Pages Blog hai 🚀</h1>
-  <p>Jald hi yaha aur content aayega.</p>
+  <header>
+    <h1>Welcome to My Blog</h1>
+    <p>Powered by GitHub Pages 🚀</p>
+  </header>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="container">
+    <div class="post">
+      <h2>My First Blog Post</h2>
+      <p><small>Posted on September 15, 2025</small></p>
+      <p>Yeh mera pehla post hai GitHub Pages par. Isme main test kar raha hoon ki mera blog sahi kaam kar raha hai ya nahi.</p>
+    </div>
+
+    <div class="post">
+      <h2>Another Post Example</h2>
+      <p><small>Posted on September 14, 2025</small></p>
+      <p>Aap yaha aur naye posts add kar sakte ho. Har post ko ek <code>div.post</code> ke andar likhna hai.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 My GitHub Blog | All Rights Reserved</p>
+  </footer>
 </body>
 </html>
