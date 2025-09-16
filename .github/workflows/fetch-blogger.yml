@@ -14,17 +14,18 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
 
+      # Yahan aapke original steps aayenge, jaise ki post fetch karna etc.
 
       - name: Set up Git config
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-      # Jo bhi files update/add karte hain, uske baad push step:
       - name: Commit & Push changes
+        env:
+          # PAT ko yahan bhi set karna chahiye for authentication
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git add .
           git commit -m "Update posts" || echo "No changes to commit"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          git push https://x-access-token:${GH_PAT}@github.com/romanr00776-coder/Giggiplay.github.io.git HEAD:main
