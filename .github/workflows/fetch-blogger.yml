@@ -23,7 +23,6 @@ jobs:
 
       - name: Commit & Push changes
         env:
-          # PAT ko yahan bhi set karna chahiye for authentication
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git add .
